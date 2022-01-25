@@ -10,7 +10,8 @@ import { MaterialModule } from './material.module';
   ],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   exports: [
     CommentsComponent,

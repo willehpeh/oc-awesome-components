@@ -8,6 +8,6 @@
     <span class="post-content">{{ post.content }}</span>
   </mat-card-content>
   <mat-card-actions>
-    <app-comments></app-comments>
+    <app-comments [comments]="post.comments"></app-comments>
   </mat-card-actions>
 </mat-card>
