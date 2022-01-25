@@ -11,7 +11,6 @@ export class HighlightDirective implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.el.nativeElement.innerText);
     if (this.el.nativeElement.innerText.includes('You')) {
       this.setBackgroundColor(this.color);
     }
