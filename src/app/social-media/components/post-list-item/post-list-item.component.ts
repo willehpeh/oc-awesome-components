@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Post } from '../../models/post.model';
+import { PostCommentEvent } from '../../models/post-comment-event.model';
 
 @Component({
   selector: 'app-post-list-item',
@@ -9,10 +10,18 @@ import { Post } from '../../models/post.model';
 export class PostListItemComponent implements OnInit {
 
   @Input() post!: Post;
+  @Output() postCommented = new EventEmitter<PostCommentEvent>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onPostCommented(comment: string): void {
+    this.postCommented.emit({
+      comment,
+      postId: this.post.id
+    });
   }
 
 }

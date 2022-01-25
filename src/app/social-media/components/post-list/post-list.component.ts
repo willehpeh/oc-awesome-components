@@ -3,6 +3,7 @@ import { PostsService } from '../../services/posts.service';
 import { map, Observable } from 'rxjs';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute, ResolveData } from '@angular/router';
+import { PostCommentEvent } from '../../models/post-comment-event.model';
 
 @Component({
   selector: 'app-post-list',
@@ -24,6 +25,10 @@ export class PostListComponent implements OnInit {
     this.posts$ = this.route.data.pipe(
       map((data: ResolveData) => data['posts'])
     )
+  }
+
+  onPostCommented(event: PostCommentEvent) {
+    console.log(event);
   }
 
 }
