@@ -19,10 +19,21 @@ export class CommentsComponent implements OnInit {
     this.commentCtrl = this.formBuilder.control('', [Validators.required, Validators.minLength(10)]);
   }
 
+  createComment(commentText: string): Comment {
+    const newId = [...this.comments].sort((a, b) => a.id - b.id)[this.comments.length -1].id + 1;
+    return {
+      id: newId,
+      comment: commentText,
+      createdDate: new Date().toISOString(),
+      userId: 1
+    };
+  }
+
   onLeaveComment(): void {
     if (this.commentCtrl.invalid) {
       return;
     }
+    this.comments.unshift(this.createComment(this.commentCtrl.value));
     this.commentSubmitted.emit(this.commentCtrl.value);
     this.commentCtrl.reset();
   }
