@@ -1,0 +1,7 @@
+<mat-toolbar color="primary">
+  <span>Awesome Components App</span>
+  <ul class="header-links">
+    <li><a routerLink="/social-media">Social Media</a></li>
+  </ul>
+</mat-toolbar>
+<mat-progress-bar color="accent" *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
