@@ -9,7 +9,7 @@ import { DUMMY_POSTS } from './DUMMY_DATA';
 export class PostsService {
   getPosts(): Observable<Post[]> {
     return of(DUMMY_POSTS).pipe(
-      delay(5000)
+      delay(1000)
     );
   }
 }
