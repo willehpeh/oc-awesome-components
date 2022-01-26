@@ -43,11 +43,13 @@ import { animate, AnimationEvent, state, style, transition, trigger } from '@ang
       transition(':enter', [
         style({
           transform: 'translateX(-100%)',
-          opacity: 0
+          opacity: 0,
+          backgroundColor: 'rgb(201, 157, 242)'
         }),
         animate('250ms ease-out', style({
           transform: 'translateX(0)',
-          opacity: 1
+          opacity: 1,
+          backgroundColor: 'white',
         }))
       ])
     ])
