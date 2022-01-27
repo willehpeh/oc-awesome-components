@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComplexFormRoutingModule } from './complex-form-routing.module';
 import { ComplexFormComponent } from './components/complex-form/complex-form.component';
+import { ComplexFormService } from './services/complex-form.service';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,9 @@ import { ComplexFormComponent } from './components/complex-form/complex-form.com
     HttpClientModule,
     ReactiveFormsModule,
     ComplexFormRoutingModule
+  ],
+  providers: [
+    ComplexFormService
   ]
 })
 export class ComplexFormModule { }

@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HighlightDirective } from './directives/highlight.directive';
     ReactiveFormsModule,
     MaterialModule,
     TimeAgoPipe,
-    HighlightDirective
+    HighlightDirective,
+    HttpClientModule
   ]
 })
 export class SharedModule {
