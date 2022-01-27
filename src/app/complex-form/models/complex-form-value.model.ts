@@ -6,7 +6,7 @@ export class ComplexFormValue {
   contactPreference!: string;
   email?: {
     email: string,
-    confirmEmail: string
+    confirm: string
   };
   phone?: string;
   loginInfo!: {

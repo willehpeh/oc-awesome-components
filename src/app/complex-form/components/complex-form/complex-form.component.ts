@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith, tap } from 'rxjs';
 import { ComplexFormService } from '../../services/complex-form.service';
+import { confirmEqualValidator } from '../../validators/confirm-equal.validator';
 
 @Component({
   selector: 'app-complex-form',
@@ -45,7 +46,7 @@ export class ComplexFormComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
-    });
+    }, { validators: confirmEqualValidator('password', 'confirmPassword') });
   }
 
   initFormObservables() {
@@ -55,13 +56,14 @@ export class ComplexFormComponent implements OnInit {
       tap(showEmail => {
         if (showEmail) {
           this.emailForm.get('email')?.addValidators([Validators.required, Validators.email]);
-          this.emailForm.get('confirmEmail')?.addValidators(Validators.required);
+          this.emailForm.get('confirm')?.addValidators(Validators.required);
+          this.emailForm.addValidators(confirmEqualValidator('email', 'confirm'));
         } else {
           this.emailForm.get('email')?.clearValidators();
-          this.emailForm.get('confirmEmail')?.clearValidators();
+          this.emailForm.get('confirm')?.clearValidators();
         }
         this.emailForm.get('email')?.updateValueAndValidity();
-        this.emailForm.get('confirmEmail')?.updateValueAndValidity();
+        this.emailForm.get('confirm')?.updateValueAndValidity();
       })
     );
     this.showPhoneCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
