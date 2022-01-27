@@ -69,7 +69,7 @@ export class ComplexFormComponent implements OnInit {
     this.showPhoneCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
       map(value => value === 'phone'),
       tap(showPhone => {
-        showPhone ? this.phoneCtrl.addValidators(Validators.required) : this.phoneCtrl.clearValidators();
+        showPhone ? this.phoneCtrl.addValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]) : this.phoneCtrl.clearValidators();
         this.phoneCtrl.updateValueAndValidity();
       })
     );
