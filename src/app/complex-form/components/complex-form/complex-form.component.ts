@@ -16,6 +16,8 @@ export class ComplexFormComponent implements OnInit {
   personalInfoForm!: FormGroup;
   contactPreferenceCtrl!: FormControl;
   emailForm!: FormGroup;
+  emailCtrl!: FormControl;
+  confirmEmailCtrl!: FormControl;
   phoneCtrl!: FormControl;
   loginInfoForm!: FormGroup;
 
@@ -37,9 +39,11 @@ export class ComplexFormComponent implements OnInit {
       lastName: ['', Validators.required]
     });
     this.contactPreferenceCtrl = this.formBuilder.control('email');
+    this.emailCtrl = this.formBuilder.control('');
+    this.confirmEmailCtrl = this.formBuilder.control('');
     this.emailForm = this.formBuilder.group({
-      email: [''],
-      confirm: ['']
+      email: this.emailCtrl,
+      confirm: this.confirmEmailCtrl
     });
     this.phoneCtrl = this.formBuilder.control(null);
     this.loginInfoForm = this.formBuilder.group({
@@ -55,15 +59,15 @@ export class ComplexFormComponent implements OnInit {
       startWith(true),
       tap(showEmail => {
         if (showEmail) {
-          this.emailForm.get('email')?.addValidators([Validators.required, Validators.email]);
-          this.emailForm.get('confirm')?.addValidators(Validators.required);
+          this.emailCtrl.addValidators([Validators.required, Validators.email]);
+          this.confirmEmailCtrl.addValidators(Validators.required);
           this.emailForm.addValidators(confirmEqualValidator('email', 'confirm'));
         } else {
-          this.emailForm.get('email')?.clearValidators();
-          this.emailForm.get('confirm')?.clearValidators();
+          this.emailCtrl.clearValidators();
+          this.confirmEmailCtrl.clearValidators();
         }
-        this.emailForm.get('email')?.updateValueAndValidity();
-        this.emailForm.get('confirm')?.updateValueAndValidity();
+        this.emailCtrl.updateValueAndValidity();
+        this.confirmEmailCtrl.updateValueAndValidity();
       })
     );
     this.showPhoneCtrl$ = this.contactPreferenceCtrl.valueChanges.pipe(
