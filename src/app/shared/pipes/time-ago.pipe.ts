@@ -11,7 +11,7 @@ export class TimeAgoPipe implements PipeTransform {
     day: 24 * 60 * 60 * 1000,
     week: 7 * 24 * 60 * 60 * 1000,
     month: 30 * 7 * 24 * 60 * 60 * 1000,
-    year: 365 * 30 * 7 * 24 * 60 * 60 * 1000
+    year: 365 * 24 * 60 * 60 * 1000
   };
 
   transform(value: string | null): string {

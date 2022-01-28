@@ -3,7 +3,7 @@
     <mat-card-title>
       <span highlight color="rgb(201, 157, 242)">{{ post.title | titlecase }}</span>
     </mat-card-title>
-    <mat-card-subtitle>{{ post.createdDate | date: 'long' | timeAgo }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ post.createdDate | timeAgo }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <img mat-card-image *ngIf="post.imageUrl as imageUrl" [src]="imageUrl" [alt]="post.title">
