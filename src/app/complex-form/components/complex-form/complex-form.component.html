@@ -25,13 +25,18 @@
     <div class="form-row">
       <mat-form-field appearance="fill">
         <mat-label>Adresse e-mail</mat-label>
-        <input matInput type="email" formControlName="email">
+        <input matInput type="email" [formControl]="emailCtrl">
+        <mat-error *ngIf="emailCtrl.invalid">{{ getErrorMessage(emailCtrl) }}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Confirmer votre adresse e-mail</mat-label>
-        <input matInput type="email" formControlName="confirm">
+        <input matInput type="email" [formControl]="confirmEmailCtrl">
+        <mat-error *ngIf="emailCtrl.invalid">{{ getErrorMessage(emailCtrl) }}</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showEmailError$ | async">
+      Les deux adresses ne correspondent pas
+    </small>
   </mat-card>
   <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
     <mat-card-subtitle>Phone</mat-card-subtitle>
@@ -49,13 +54,16 @@
     <div class="form-row">
       <mat-form-field appearance="fill">
         <mat-label>Mot de passe</mat-label>
-        <input matInput type="password" formControlName="password">
+        <input matInput type="password" [formControl]="passwordCtrl">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Confirmer votre mot de passe</mat-label>
-        <input matInput type="password" formControlName="confirmPassword">
+        <input matInput type="password" [formControl]="confirmPasswordCtrl">
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showPasswordError$ | async">
+      Les mots de passe ne correspondent pas
+    </small>
   </mat-card>
   <mat-card-actions *ngIf="mainForm.valid">
     <button mat-flat-button color="primary" (click)="onSubmitForm()">ENREGISTRER</button>

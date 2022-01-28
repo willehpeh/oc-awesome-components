@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith, tap } from 'rxjs';
 import { ComplexFormService } from '../../services/complex-form.service';
 import { confirmEqualValidator } from '../../validators/confirm-equal.validator';
@@ -20,9 +20,14 @@ export class ComplexFormComponent implements OnInit {
   confirmEmailCtrl!: FormControl;
   phoneCtrl!: FormControl;
   loginInfoForm!: FormGroup;
+  passwordCtrl!: FormControl;
+  confirmPasswordCtrl!: FormControl;
 
   showEmailCtrl$!: Observable<boolean>;
   showPhoneCtrl$!: Observable<boolean>;
+
+  showEmailError$!: Observable<boolean>;
+  showPasswordError$!: Observable<boolean>;
 
   constructor(private formBuilder: FormBuilder,
               private complexFormService: ComplexFormService) { }
@@ -39,17 +44,19 @@ export class ComplexFormComponent implements OnInit {
       lastName: ['', Validators.required]
     });
     this.contactPreferenceCtrl = this.formBuilder.control('email');
-    this.emailCtrl = this.formBuilder.control('');
-    this.confirmEmailCtrl = this.formBuilder.control('');
+    this.emailCtrl = this.formBuilder.control('', { updateOn: 'blur' });
+    this.confirmEmailCtrl = this.formBuilder.control('', { updateOn: 'blur' });
     this.emailForm = this.formBuilder.group({
       email: this.emailCtrl,
       confirm: this.confirmEmailCtrl
     });
-    this.phoneCtrl = this.formBuilder.control(null);
+    this.phoneCtrl = this.formBuilder.control('');
+    this.passwordCtrl = this.formBuilder.control('', { validators: Validators.required, updateOn: 'blur' });
+    this.confirmPasswordCtrl = this.formBuilder.control('', { validators: Validators.required, updateOn: 'blur' });
     this.loginInfoForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      password: this.passwordCtrl,
+      confirmPassword: this.confirmPasswordCtrl,
     }, { validators: confirmEqualValidator('password', 'confirmPassword') });
   }
 
@@ -77,6 +84,22 @@ export class ComplexFormComponent implements OnInit {
         this.phoneCtrl.updateValueAndValidity();
       })
     );
+    this.showEmailError$ = this.emailForm.statusChanges.pipe(
+      map(status => {
+        if (status !== 'INVALID' || (!this.emailCtrl.touched || !this.confirmEmailCtrl.touched) || !this.emailForm.hasError('valuesNotEqual')) {
+          return false;
+        }
+        return true;
+      })
+    );
+    this.showPasswordError$ = this.loginInfoForm.statusChanges.pipe(
+      map(status => {
+        if (status !== 'INVALID' || (!this.passwordCtrl.touched || !this.confirmPasswordCtrl.touched) || !this.loginInfoForm.hasError('valuesNotEqual')) {
+          return false;
+        }
+        return true;
+      })
+    )
   }
 
   initMainForm() {
@@ -99,5 +122,17 @@ export class ComplexFormComponent implements OnInit {
         }
       })
     ).subscribe();
+  }
+
+  getErrorMessage(ctrl: AbstractControl): string {
+    if (ctrl.hasError('required')) {
+      return 'Ce champ est requis';
+    } else if (ctrl.hasError('email')) {
+      return 'Vous devez entrer une adresse mail valable';
+    } else if (ctrl.hasError('minlength') || ctrl.hasError('maxlength')) {
+      return 'Ce numéro n\'a pas le bon nombre de chiffres';
+    } else {
+      return 'Ce champ n\'est pas valable';
+    }
   }
 }
