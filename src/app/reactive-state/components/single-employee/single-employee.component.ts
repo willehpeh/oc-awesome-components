@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService } from '../../services/employees.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, switchMap, take } from 'rxjs';
 import { Employee } from '../../models/employee.model';
 
@@ -15,7 +15,8 @@ export class SingleEmployeeComponent implements OnInit {
   employee$!: Observable<Employee>;
 
   constructor(private employeesService: EmployeesService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loading$ = this.employeesService.loading$;
@@ -30,4 +31,7 @@ export class SingleEmployeeComponent implements OnInit {
     );
   }
 
+  onGoBack() {
+    this.router.navigateByUrl('/reactive-state/employees');
+  }
 }
