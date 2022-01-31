@@ -6,12 +6,14 @@ import { MaterialModule } from './material.module';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
 
 @NgModule({
   declarations: [
     CommentsComponent,
     TimeAgoPipe,
-    HighlightDirective
+    HighlightDirective,
+    LoadingOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   exports: [
     CommentsComponent,
+    LoadingOverlayComponent,
     ReactiveFormsModule,
     MaterialModule,
     TimeAgoPipe,

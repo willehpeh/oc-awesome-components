@@ -86,7 +86,7 @@ export class ComplexFormComponent implements OnInit {
     );
     this.showEmailError$ = this.emailForm.statusChanges.pipe(
       map(status => {
-        if (status !== 'INVALID' || (!this.emailCtrl.touched || !this.confirmEmailCtrl.touched) || !this.emailForm.hasError('valuesNotEqual')) {
+        if (status !== 'INVALID' || !this.emailCtrl.touched || !this.emailForm.hasError('valuesNotEqual')) {
           return false;
         }
         return true;
@@ -94,7 +94,7 @@ export class ComplexFormComponent implements OnInit {
     );
     this.showPasswordError$ = this.loginInfoForm.statusChanges.pipe(
       map(status => {
-        if (status !== 'INVALID' || (!this.passwordCtrl.touched || !this.confirmPasswordCtrl.touched) || !this.loginInfoForm.hasError('valuesNotEqual')) {
+        if (status !== 'INVALID' || !this.passwordCtrl.touched || !this.loginInfoForm.hasError('valuesNotEqual')) {
           return false;
         }
         return true;
@@ -117,9 +117,9 @@ export class ComplexFormComponent implements OnInit {
     this.complexFormService.saveUserInfo(this.mainForm.value).pipe(
       tap(response => {
         this.loading = false;
-        if (!response) {
-          console.error('Something went wrong!');
-        }
+        response ? this.mainForm.reset({
+          contactPreference: 'email'
+        }) : console.error('Something went wrong!');
       })
     ).subscribe();
   }
