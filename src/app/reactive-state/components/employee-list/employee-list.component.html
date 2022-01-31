@@ -1,5 +1,22 @@
 <mat-card>
-  <mat-card-title>Employés</mat-card-title>
+  <mat-card-title-group>
+    <mat-card-title>
+      Employés
+    </mat-card-title>
+    <div class="form">
+      <mat-form-field appearance="fill">
+        <input matInput type="text" [formControl]="searchCtrl">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-select [formControl]="searchTypeCtrl">
+          <mat-option [value]="'lastName'">Nom</mat-option>
+          <mat-option [value]="'firstName'">Prénom</mat-option>
+          <mat-option [value]="'company'">Entreprise</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-title-group>
   <mat-spinner *ngIf="loading$ | async"></mat-spinner>
   <mat-nav-list *ngIf="employees$ | async as employees">
     <a *ngFor="let employee of employees" mat-list-item [routerLink]="employee.id.toString()">
