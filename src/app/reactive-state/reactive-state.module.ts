@@ -6,7 +6,6 @@ import { EmployeeListComponent } from './components/employee-list/employee-list.
 import { EmployeesService } from './services/employees.service';
 import { SingleEmployeeComponent } from './components/single-employee/single-employee.component';
 
-
 @NgModule({
   declarations: [
     EmployeeListComponent,

@@ -6,13 +6,17 @@ import { AfterViewInit, Directive, ElementRef, HostListener, Input, Renderer2 } 
 export class HighlightDirective implements AfterViewInit {
 
   @Input() color = 'yellow';
+  @Input() detectText = '';
+
+  private enabled = false;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {
   }
 
   ngAfterViewInit(): void {
-    if (this.el.nativeElement.innerText.includes('You')) {
+    if (this.el.nativeElement.innerText.includes(this.detectText)) {
       this.setBackgroundColor(this.color);
+      this.enabled = true;
     }
   }
 
@@ -21,10 +25,14 @@ export class HighlightDirective implements AfterViewInit {
   }
 
   @HostListener('mouseenter') mouseEnter() {
-    this.setBackgroundColor('lightgreen');
+    if (this.enabled) {
+      this.setBackgroundColor('lightgreen');
+    }
   }
 
   @HostListener('mouseleave') mouseLeave() {
-    this.setBackgroundColor(this.color);
+    if (this.enabled) {
+      this.setBackgroundColor(this.color);
+    }
   }
 }

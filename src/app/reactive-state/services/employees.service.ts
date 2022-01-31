@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, delay, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, switchMap, take, tap } from 'rxjs';
 import { Employee } from '../models/employee.model';
 
 @Injectable()
@@ -35,26 +35,40 @@ export class EmployeesService {
     ).subscribe();
   }
 
-  getSingleEmployeeFromServer(id: number) {
+  getEmployeeById(id: number) {
+    if (!this.allEmployeesLastLoad) {
+      this.getEmployeesFromServer();
+    }
+    return this.employees$.pipe(
+      map(employees => employees.filter(employee => employee.id === id)[0]),
+    );
+  }
+
+  deleteEmployee(id: number) {
     this.setLoadingStatus(true);
-    this.http.get<Employee[]>(`http://localhost:3000/employees?id=${id}`).pipe(
+    this.http.delete(`http://localhost:3000/employees/${id}`).pipe(
       delay(1000),
+      switchMap(() => this.employees$.pipe(take(1))),
+      map(employees => employees.filter(employee => employee.id !== id)),
       tap(employees => {
-        this._employees$.next([...employees]);
+        this._employees$.next(employees);
         this.setLoadingStatus(false);
       })
     ).subscribe();
   }
 
-  getEmployeeById(id: number) {
-    return this.employees$.pipe(
-      map(employees => employees.filter(employee => employee.id === id)[0]),
-      tap(employee => {
-        if (!employee) {
-          this.getSingleEmployeeFromServer(id);
-        }
-      })
-    );
+  hireEmployee(id: number) {
+    this.employees$.pipe(
+      take(1),
+      map(employees => {
+        const employeeToUpdate = employees.filter(employee => employee.id === id)[0];
+        const updatedEmployee = { ...employeeToUpdate, company: 'Open Classrooms' };
+        const updatedEmployees = employees.map(employee => employee.id === id ? updatedEmployee : employee);
+        return { updatedEmployees, updatedEmployee };
+      }),
+      tap(({ updatedEmployees, updatedEmployee }) => this._employees$.next(updatedEmployees)),
+      switchMap(({ updatedEmployee }) => this.http.patch(`http://localhost:3000/employees/${id}`, updatedEmployee))
+    ).subscribe();
   }
 
   private setLoadingStatus(status: boolean) {

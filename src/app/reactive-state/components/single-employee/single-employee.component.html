@@ -1,5 +1,4 @@
 <mat-card>
-  <mat-spinner *ngIf="loading$ | async"></mat-spinner>
   <ng-container *ngIf="employee$ | async as employee">
     <img [src]="employee.imageUrl" [alt]="employee.firstName + ' ' + employee.lastName">
     <div class="employee-info">
@@ -9,6 +8,13 @@
     </div>
   </ng-container>
   <mat-card-actions>
-    <button mat-flat-button color="primary" (click)="onGoBack()">RETOUR</button>
+    <mat-spinner *ngIf="loading$ | async; else buttons"></mat-spinner>
+    <ng-template #buttons>
+      <div class="action-buttons">
+        <button mat-flat-button color="accent" (click)="onHire()">EMBAUCHER</button>
+        <button mat-flat-button color="warn" (click)="onRefuse()">REFUSER</button>
+      </div>
+      <button mat-flat-button color="primary" (click)="onGoBack()">RETOUR</button>
+    </ng-template>
   </mat-card-actions>
 </mat-card>

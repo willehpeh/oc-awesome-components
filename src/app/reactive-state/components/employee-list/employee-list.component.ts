@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, map, Observable, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Employee } from '../../models/employee.model';
 import { EmployeesService } from '../../services/employees.service';
 import { FormControl } from '@angular/forms';
@@ -11,7 +11,9 @@ type SearchType = 'lastName' | 'firstName' | 'company';
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit, OnDestroy {
+
+  private destroy$!: Subject<boolean>;
 
   loading$!: Observable<boolean>;
   employees$!: Observable<Employee[]>;
@@ -23,6 +25,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.destroy$ = new Subject<boolean>();
     this.initForm();
     this.initObservables();
     this.employeesService.getEmployeesFromServer();
@@ -46,11 +49,16 @@ export class EmployeeListComponent implements OnInit {
       search: searchTerm$,
       type: searchType$
     }).pipe(
+      takeUntil(this.destroy$),
       switchMap(value => this.employeesService.employees$.pipe(
         map(employees => employees.filter(employee => employee[value.type as SearchType]
           .toLowerCase()
           .includes(value.search))),
       ))
     );
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
   }
 }

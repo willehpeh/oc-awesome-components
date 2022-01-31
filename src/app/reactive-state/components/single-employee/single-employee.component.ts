@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService } from '../../services/employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, switchMap, take } from 'rxjs';
+import { filter, map, Observable, shareReplay, switchMap, take, tap } from 'rxjs';
 import { Employee } from '../../models/employee.model';
 
 @Component({
@@ -13,6 +13,7 @@ export class SingleEmployeeComponent implements OnInit {
 
   loading$!: Observable<boolean>;
   employee$!: Observable<Employee>;
+  employeeId$!: Observable<number>;
 
   constructor(private employeesService: EmployeesService,
               private route: ActivatedRoute,
@@ -25,13 +26,37 @@ export class SingleEmployeeComponent implements OnInit {
 
   initObservables() {
     this.employee$ = this.route.params.pipe(
-      take(1),
       map(params => +params['id']),
       switchMap(id => this.employeesService.getEmployeeById(id)),
+      filter(employee => !!employee),
+      take(1),
+      shareReplay(1)
+    );
+    this.employeeId$ = this.employee$.pipe(
+      map(employee => employee.id)
     );
   }
 
   onGoBack() {
     this.router.navigateByUrl('/reactive-state/employees');
+  }
+
+  onRefuse() {
+    this.employeeId$.pipe(
+      tap(id => {
+        this.employeesService.deleteEmployee(id);
+        this.onGoBack();
+      })
+    ).subscribe();
+  }
+
+  onHire() {
+    this.employeeId$.pipe(
+      tap(id => {
+        console.log('here');
+        this.employeesService.hireEmployee(id);
+        this.onGoBack();
+      })
+    ).subscribe();
   }
 }
