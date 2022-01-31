@@ -1,5 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, map, Observable, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil
+} from 'rxjs';
 import { Employee } from '../../models/employee.model';
 import { EmployeesService } from '../../services/employees.service';
 import { FormControl } from '@angular/forms';
@@ -40,6 +50,8 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.loading$ = this.employeesService.loading$;
     const searchTerm$ = this.searchCtrl.valueChanges.pipe(
       startWith(this.searchCtrl.value),
+      debounceTime(300),
+      distinctUntilChanged(),
       map((value: string) => value.toLowerCase())
     );
     const searchType$ = this.searchTypeCtrl.valueChanges.pipe(

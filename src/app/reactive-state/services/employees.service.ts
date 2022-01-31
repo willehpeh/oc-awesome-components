@@ -48,7 +48,8 @@ export class EmployeesService {
     this.setLoadingStatus(true);
     this.http.delete(`http://localhost:3000/employees/${id}`).pipe(
       delay(1000),
-      switchMap(() => this.employees$.pipe(take(1))),
+      switchMap(() => this.employees$),
+      take(1),
       map(employees => employees.filter(employee => employee.id !== id)),
       tap(employees => {
         this._employees$.next(employees);
