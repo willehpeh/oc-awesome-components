@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { EmployeesService } from '../../services/employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, shareReplay, switchMap, take, tap } from 'rxjs';
@@ -7,7 +7,8 @@ import { Employee } from '../../models/employee.model';
 @Component({
   selector: 'app-single-employee',
   templateUrl: './single-employee.component.html',
-  styleUrls: ['./single-employee.component.scss']
+  styleUrls: ['./single-employee.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SingleEmployeeComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   combineLatest,
   debounceTime,
@@ -19,7 +19,8 @@ type SearchType = 'lastName' | 'firstName' | 'company';
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.scss']
+  styleUrls: ['./employee-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeeListComponent implements OnInit, OnDestroy {
 
@@ -50,8 +51,6 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.loading$ = this.employeesService.loading$;
     const searchTerm$ = this.searchCtrl.valueChanges.pipe(
       startWith(this.searchCtrl.value),
-      debounceTime(300),
-      distinctUntilChanged(),
       map((value: string) => value.toLowerCase())
     );
     const searchType$ = this.searchTypeCtrl.valueChanges.pipe(
