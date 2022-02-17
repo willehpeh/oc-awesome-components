@@ -60,7 +60,6 @@ export class CommentsComponent implements OnInit {
   commentCtrl!: FormControl;
   @Input() comments!: Comment[];
   @Output() commentSubmitted = new EventEmitter<string>();
-  raisedIndex = -1;
   animationStatuses: { [key: number]: 'raised' | 'default' | 'delete' | 'deleted' } = {};
   deleteTimer!: number;
 
